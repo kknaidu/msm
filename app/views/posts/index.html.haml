@@ -1,20 +1,20 @@
 %h1 Listing posts
 
-%table
+%table.table.table-striped
   %tr
     %th Name
     %th Comment
     %th
-    %th
-    %th
+    
 
   - @posts.each do |post|
     %tr
       %td= post.name
       %td= post.comment
-      %td= link_to 'Show', post
-      %td= link_to 'Edit', edit_post_path(post)
-      %td= link_to 'Destroy', post, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %td
+        = link_to 'Show', post,:class => 'btn btn-info'
+        = link_to 'Edit', edit_post_path(post),:class => 'btn btn-primary'
+        = link_to 'Destroy', post, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-danger'
 
 %br
 

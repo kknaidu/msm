@@ -5,6 +5,14 @@ Rails.application.routes.draw do
 
   devise_for :users
   root :to => "home#index"
+
+  #scope :constraints => {subdomain: 'app'} do
+   # scope :module => "superadmin" do
+    #  resources :accounts, except: [:destroy]
+     # root to: 'accounts#index'
+    #end
+  #end
+
   #root 'post#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

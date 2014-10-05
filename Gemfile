@@ -6,7 +6,9 @@ gem 'rails', '4.1.4'
 #gem 'sqlite3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
-gem 'bootstrap-sass', '~> 3.1.0'  
+gem 'bootstrap-sass', '~> 3.1.0'
+gem 'autoprefixer-rails'  
+gem 'bootswatch-rails'
 
 gem 'haml'
 gem 'haml-rails'

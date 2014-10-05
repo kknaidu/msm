@@ -24,5 +24,45 @@ module Msm
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
+    
+    class MongoidDbSwitcher
+      def initialize(app)
+        @app = app
+      end
+
+      ADMIN_SERVERS = %w(app.lvh.me app.msm.in)
+
+      def call(env)
+        server_name = env['SERVER_NAME'].downcase
+        #translate server_name to a subdomain based url
+        server_name = translate(server_name)
+        db_name = "msm_#{server_name.gsub('.', '_')}"
+        if !ADMIN_SERVERS.include?(server_name)
+          ::Mongoid.override_database(db_name)
+          log("[DB_SWITCH] #{db_name}")
+        end
+        response = @app.call(env)
+        ::Mongoid.override_database(nil)
+        log("[DB_SWITCH] reset")
+        response
+      end
+
+      def translate(server_name)
+        domain = Domain.where(_id: server_name).first
+        domain.try(:subdomain) || server_name
+      end
+
+      def log(msg)
+        Rails.logger.debug msg
+      end
+
+    end
+
+
+    config.middleware.insert_before Rack::Lock, MongoidDbSwitcher
   end
 end
